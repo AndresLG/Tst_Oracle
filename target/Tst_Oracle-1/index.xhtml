@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Tst_Oracle</title>
+    </h:head>
+    <h:body>
+        <h1><center>Ventas</center></h1>
+        <br/>
+        <h:form id="form">
+            <p:growl id="growl" showDetail="true"  life="1000"/>  
+            <p:panelGrid columns="2">
+                <h:outputLabel value="Año"/>
+                <p:inputText value="#{ventaC.venta.AÑOVEN}" placeholder="Año" maxlength="4" >
+                    <p:keyFilter regEx="/[\d\-]/"/>
+                </p:inputText>
+                <h:outputLabel value="Total"/>
+                <p:inputText value="#{ventaC.venta.TOTVEN}" placeholder="Celular" maxlength="2" >
+                    <p:keyFilter regEx="/[\d\-]/"/>
+                </p:inputText>
+                <p:commandButton actionListener="#{ventaC.add()}" update="form :FormTblVenta:tblVenta"  value="REGISTRAR" action="#{ventaC.limpiar()}" />
+            </p:panelGrid>
+        </h:form>
+        <br/>
+        <h:form id="FormTblVenta">
+            <p:dataTable id="tblVenta"  
+                         value="#{ventaC.lstVenta}"
+                         var="venta"
+                         selectionMode="single"
+                         selection="#{ventaC.selectedVenta}"
+                         rowKey="#{venta.CODVEN}"
+                         rows="10" paginator="true"
+                         paginatorTemplate="{CurrentPageReport} {PageLinks} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15" reflow="true">
+                <p:column headerText="#">
+                    <center><p:outputLabel value="#{venta.CODVEN}"/></center>
+                </p:column>
+                <p:column headerText="AÑO">
+                    <center><p:outputLabel value="#{venta.AÑOVEN}"/></center>
+                </p:column>
+                <p:column headerText="TOTAL">
+                    <center><p:outputLabel value="#{venta.TOTVEN}"/></center>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+        <h:form>
+            <p:growl id="growly" showDetail="true" />
+
+            <p:barChart model="#{ventaC.lstVenta}" style="width: 100%; height: 500px;">
+                <p:ajax event="itemSelect" listener="#{ventaC.listar()}" update="growly"/>
+            </p:barChart>
+        </h:form>
+    </h:body>
+</html>
+
